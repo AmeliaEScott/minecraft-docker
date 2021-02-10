@@ -12,7 +12,7 @@ chown -R $PUID:$PGID /backup
 # Intercept the shutdown signal to send a nice, friendly "stop" command to the server
 cleanup() {
     echo "Container stopped, stopping server cleanly..."
-    rconclt ${RCON_PASSWORD}@localhost:25575 stop
+    rconclt ${RCON_PASSWORD}@localhost:${RCON_PORT} stop
 }
 trap 'cleanup' SIGTERM
 

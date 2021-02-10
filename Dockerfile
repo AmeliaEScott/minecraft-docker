@@ -7,4 +7,6 @@ RUN \
 
 COPY scripts /scripts
 
+ENV RCON_PORT=25575
+
 ENTRYPOINT ["/scripts/entrypoint.sh"]

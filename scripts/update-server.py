@@ -71,7 +71,7 @@ else:
         sys.exit(-3)
     with open(SERVER_JAR, "wb") as f:
         f.write(r.content)
-    os.chmod(SERVER_JAR, 0o764)
+    os.chmod(SERVER_JAR, 0o764)  # TODO: Is this actually necessary?
     print("Done updating server!")
 
 

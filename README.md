@@ -17,7 +17,7 @@ services:
       - TZ=Europe/New_York  # Currently unused. TODO: Implement
       - MC_VERSION=latest_release  # See below for options
       - RCON_PASSWORD=password  # Should match `rcon.password` in server.properties
-      - RCON_PORT=25575  # Should match `rcon.port` in server.properties
+      - RCON_PORT=25575  # Optional, defaults to 25575. Should match `rcon.port` in server.properties
       - BACKUP_SCHEDULE=*/2 * * * * *  # Use cron syntax here. Currently unimplemented. TODO
     volumes:
       - /path/to/server/folder:/server
