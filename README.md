@@ -18,7 +18,7 @@ services:
       - MC_VERSION=latest_release  # See below for options
       - RCON_PASSWORD=password  # Should match `rcon.password` in server.properties
       - RCON_PORT=25575  # Optional, defaults to 25575. Should match `rcon.port` in server.properties
-      - BACKUP_SCHEDULE=*/2 * * * * *  # Use cron syntax here. Currently unimplemented. TODO
+      - BACKUP_SCHEDULE='0 */2 * * * *'  # Use cron syntax here. This example backs up every 2 hours.
     volumes:
       - /path/to/server/folder:/server
       - /path/to/backup/folder:/backup
@@ -89,4 +89,9 @@ The `entrypoint.sh` will launch your `runserver.sh` script as the `minecraft` us
 
 ## Automatic Backups
 
-TODO: Implement and document this feature
+This container automatically backs up the entire contents of `/server` to `/backup`. To control
+how often this backup happens, use the `BACKUP_SCHEDULE` environment variable, following
+[cron syntax](https://crontab.guru/).
+
+The backups are created using [rdiff-backup](https://rdiff-backup.net/). Because these are differential
+backups, they take up much less space than doing a full mirror every time.
