@@ -8,6 +8,8 @@ chown -R $PUID:$PGID /server
 chown -R $PUID:$PGID /backup
 
 # TODO: Timezone?
+ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime
+dpkg-reconfigure --frontend noninteractive tzdata
 
 # Intercept the shutdown signal to send a nice, friendly "stop" command to the server
 cleanup() {
@@ -22,12 +24,16 @@ sudo -HE -u minecraft python3.8 /scripts/update_server.py
 # Actually run the Minecraft server (as the minecraft user)
 cd /server
 sudo -HE -u minecraft bash -c /server/runserver.sh &
+MINECRAFT_PID=$!
 
 # Setup auto backups
 # Need to pass in the RCON_PASSWORD and RCON_PORT environment variables to the backup script.
 # But cron doesn't know these environment variables normally. So I just embed their values
 # directly in the crontab file. It's a dirty hack, but it works.
+printf "${BACKUP_SCHEDULE} RCON_PASSWORD=${RCON_PASSWORD} RCON_PORT=${RCON_PORT} sudo -HE -u minecraft /scripts/backup.sh \n\n"
 printf "${BACKUP_SCHEDULE} RCON_PASSWORD=${RCON_PASSWORD} RCON_PORT=${RCON_PORT} sudo -HE -u minecraft /scripts/backup.sh \n\n" | crontab -
 cron -f &
+CRON_PID=$!
 
-wait $!
+wait $MINECRAFT_PID
+kill $CRON_PID
